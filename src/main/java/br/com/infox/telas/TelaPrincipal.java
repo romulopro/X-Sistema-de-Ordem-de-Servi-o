@@ -5,6 +5,9 @@ package br.com.infox.telas;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.synth.ColorType;
+import javax.swing.text.AttributeSet.ColorAttribute;
+
 import java.awt.Dimension;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -16,6 +19,8 @@ import java.awt.event.InputEvent;
 import javax.swing.JDesktopPane;
 import java.awt.Rectangle;
 import javax.swing.JLabel;
+
+import java.text.Collator;
 import java.text.DateFormat;
 import java.util.Date;
 import java.awt.event.ActionListener;
@@ -32,8 +37,9 @@ public class TelaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 * @param usuario 
+	 * @param perfil 
 	 */
-	public TelaPrincipal(String usuario) {
+	public TelaPrincipal(String nomeUsuario, String perfilUsuario) {
 		
 		setBounds(new Rectangle(0, 0, 800, 600));
 		
@@ -56,9 +62,8 @@ public class TelaPrincipal extends JFrame {
 		mntmOs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.ALT_DOWN_MASK));
 		mnCadastro.add(mntmOs);
 		
-		mntmUsuarios = new JMenuItem("Usuários");
-		mntmUsuarios.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_DOWN_MASK));
-		mnCadastro.add(mntmUsuarios);
+		
+		
 		
 		
 		mnRelatorio = new JMenu("Relatório");
@@ -76,7 +81,8 @@ public class TelaPrincipal extends JFrame {
 		JMenuItem mntmSobre = new JMenuItem("Sobre");
 		mntmSobre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				TelaSobre telaSobre = new TelaSobre();
+				telaSobre.setVisible(true);
 			}
 		});
 		mntmSobre.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.ALT_DOWN_MASK));
@@ -104,33 +110,40 @@ public class TelaPrincipal extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JDesktopPane desktopPane = new JDesktopPane();
-		desktopPane.setBounds(12, 12, 640, 480);
-		contentPane.add(desktopPane);
+		JDesktopPane telaPrincipalDesktopPane = new JDesktopPane();
+		telaPrincipalDesktopPane.setMaximumSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setMinimumSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setBounds(12, 12, 640, 480);
+		contentPane.add(telaPrincipalDesktopPane);
 		
-		JLabel lblUsurio = new JLabel("Usuário");
-		lblUsurio.setBounds(670, 51, 70, 15);
-		contentPane.add(lblUsurio);
+		mntmUsuarios = new JMenuItem("Usuários");
+		mntmUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				TelaUsuario telaUsuario = new TelaUsuario();
+				telaPrincipalDesktopPane.add(telaUsuario);
+				telaUsuario.setVisible(true);
+			}
+		});
+		mntmUsuarios.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_DOWN_MASK));
+		mnCadastro.add(mntmUsuarios);
+		
+		JLabel lblUsuario = new JLabel(nomeUsuario);
+		lblUsuario.setBounds(670, 51, 130, 15);
+		contentPane.add(lblUsuario);
 		Date data = new Date();
 		DateFormat formatador = DateFormat.getDateInstance(DateFormat.SHORT);
 		lblData = new JLabel(formatador.format(data));
 		lblData.setBounds(670, 99, 112, 15);
 		contentPane.add(lblData);
 		
-		if(usuario.equals("admin")) {
+		if(perfilUsuario.equals("admin")) {
 			mnRelatorio.setEnabled(true);
 			mntmUsuarios.setEnabled(true);
+			
 		}else {
 			mnRelatorio.setEnabled(false);
 			mntmUsuarios.setEnabled(false);
 		} 
 	}
-	
-	
-//	public JMenu getMnRelatorio() {
-//		return mnRelatorio;
-//	}
-//	public JMenuItem getMntmUsaurios() {
-//		return mntmUsuarios;
-//	}
 }

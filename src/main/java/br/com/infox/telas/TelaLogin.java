@@ -24,7 +24,8 @@ import javax.swing.ImageIcon;
 public class TelaLogin extends JFrame {
 
 	private JPanel contentPane;
-	private static final int colTabelaSQLPerfilDoUsuario = 6;
+	private static final int COL_TABELA_SQL_NOME_COMPLETO_USUARIO = 2;
+	private static final int COL_TABELA_SQL_PERFIL_USER = 6;
 	private JTextField textFieldUsuario;
 	private JPasswordField passwordFieldSenha;
 	private static JLabel lblConectado;
@@ -46,8 +47,10 @@ public class TelaLogin extends JFrame {
 			pst.setString(2, captura);
 			rs = pst.executeQuery();
 			if(rs.next()) {
-				String perfil = rs.getString(colTabelaSQLPerfilDoUsuario);
-				TelaPrincipal principal = new TelaPrincipal(perfil);
+				
+				String perfil = rs.getString(COL_TABELA_SQL_PERFIL_USER);
+				String nomeUsuario = rs.getString(COL_TABELA_SQL_NOME_COMPLETO_USUARIO);
+				TelaPrincipal principal = new TelaPrincipal(nomeUsuario, perfil);
 				principal.setVisible(true);
 				this.dispose();
 				conexao.close();
