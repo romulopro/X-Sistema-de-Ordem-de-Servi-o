@@ -23,6 +23,10 @@ import javax.swing.ImageIcon;
 
 public class TelaLogin extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6300866051527523340L;
 	private JPanel contentPane;
 	private static final int COL_TABELA_SQL_NOME_COMPLETO_USUARIO = 2;
 	private static final int COL_TABELA_SQL_PERFIL_USER = 6;
@@ -86,7 +90,13 @@ public class TelaLogin extends JFrame {
 	 */
 	public TelaLogin() {
 		
+		doLoginWindowFrame();
+		doJLabels();
+		doUserAndPassTxtFields();
+		doLogonButton();
 		
+	}
+	private void doLoginWindowFrame() {
 		setPreferredSize(new Dimension(380, 190));
 		setTitle("Tela de Login");
 		setResizable(false);
@@ -96,24 +106,8 @@ public class TelaLogin extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblUsuario = new JLabel("Usuário");
-		lblUsuario.setBounds(50, 60, 70, 15);
-		contentPane.add(lblUsuario);
-		
-		JLabel lblSenha = new JLabel("Senha");
-		lblSenha.setBounds(50, 98, 70, 15);
-		contentPane.add(lblSenha);
-		
-		textFieldUsuario = new JTextField();
-		textFieldUsuario.setBounds(138, 56, 139, 19);
-		contentPane.add(textFieldUsuario);
-		textFieldUsuario.setColumns(10);
-		
-		passwordFieldSenha = new JPasswordField();
-		passwordFieldSenha.setBounds(138, 96, 139, 19);
-		contentPane.add(passwordFieldSenha);
-		
+	}
+	private void doLogonButton() {
 		JButton btnLogar = new JButton("Logar");
 		btnLogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -122,9 +116,27 @@ public class TelaLogin extends JFrame {
 		});
 		btnLogar.setBounds(160, 145, 117, 25);
 		contentPane.add(btnLogar);
+	}
+	private void doUserAndPassTxtFields() {
+		textFieldUsuario = new JTextField();
+		textFieldUsuario.setBounds(138, 56, 139, 19);
+		contentPane.add(textFieldUsuario);
+		textFieldUsuario.setColumns(10);
+		
+		passwordFieldSenha = new JPasswordField();
+		passwordFieldSenha.setBounds(138, 96, 139, 19);
+		contentPane.add(passwordFieldSenha);
+	}
+	private void doJLabels() {
+		JLabel lblUsuario = new JLabel("Usuário");
+		lblUsuario.setBounds(50, 60, 70, 15);
+		contentPane.add(lblUsuario);
+		
+		JLabel lblSenha = new JLabel("Senha");
+		lblSenha.setBounds(50, 98, 70, 15);
+		contentPane.add(lblSenha);
 		
 		lblConectado = new JLabel("");
-		
 		lblConectado.setBounds(50, 177, 86, 59);
 		contentPane.add(lblConectado);
 	}
