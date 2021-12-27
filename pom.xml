@@ -13,11 +13,38 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.27</version>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.27</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+		
     </dependencies>
+    <build>
+    <plugins>
+	    <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-jar-plugin</artifactId>
+	    <version>2.4</version>
+	    <configuration>
+	      <archive>
+	        <manifest>
+	            <addClasspath>true</addClasspath>
+	        <mainClass>br.com.infox.telas.TelaLogin</mainClass>
+	        </manifest>
+	      </archive>
+	    </configuration>
+	    </plugin>
+    </plugins>
+    
+    </build>
+    
+    
 </project>

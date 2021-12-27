@@ -51,7 +51,6 @@ public class TelaLogin extends JFrame {
 			pst.setString(2, captura);
 			rs = pst.executeQuery();
 			if(rs.next()) {
-				
 				String perfil = rs.getString(COL_TABELA_SQL_PERFIL_USER);
 				String nomeUsuario = rs.getString(COL_TABELA_SQL_NOME_COMPLETO_USUARIO);
 				TelaPrincipal principal = new TelaPrincipal(nomeUsuario, perfil);
@@ -62,28 +61,11 @@ public class TelaLogin extends JFrame {
 				JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido");
 			}
 		}catch(Exception e) {
+			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e);
 		}
 	}
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TelaLogin frame = new TelaLogin();
-					frame.setVisible(true);
-					conexao = ModuloConexao.conector();
-					if(conexao != null) {
-						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dbok.png")));
-					}else {
-						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dberror.png")));
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
@@ -139,5 +121,25 @@ public class TelaLogin extends JFrame {
 		lblConectado = new JLabel("");
 		lblConectado.setBounds(50, 177, 86, 59);
 		contentPane.add(lblConectado);
+	}
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TelaLogin frame = new TelaLogin();
+					frame.setVisible(true);
+					conexao = ModuloConexao.conector();
+					if(conexao != null) {
+						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dbok.png")));
+					}else {
+						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dberror.png")));
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

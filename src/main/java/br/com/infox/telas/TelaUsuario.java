@@ -168,7 +168,7 @@ public class TelaUsuario extends JInternalFrame {
 			return false;
 		}
 		try {
-			double d = Double.parseDouble(strNum);
+			Double.parseDouble(strNum);
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
@@ -285,10 +285,10 @@ public class TelaUsuario extends JInternalFrame {
 		btnUsuDelete.setBounds(488, 285, 120, 120);
 		getContentPane().add(btnUsuDelete);
 		
-		JLabel lblCamposObrigatrios = new JLabel("* Campos obrigatórios");
-		lblCamposObrigatrios.setFont(new Font("Dialog", Font.BOLD, 10));
-		lblCamposObrigatrios.setBounds(444, 26, 164, 15);
-		getContentPane().add(lblCamposObrigatrios);
+		JLabel lblCamposObrigatorios = new JLabel("* Campos obrigatórios");
+		lblCamposObrigatorios.setFont(new Font("Dialog", Font.BOLD, 10));
+		lblCamposObrigatorios.setBounds(444, 26, 164, 15);
+		getContentPane().add(lblCamposObrigatorios);
 		//setBounds(100, 100, 450, 300);
 		return;
 
