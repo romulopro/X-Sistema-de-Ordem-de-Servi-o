@@ -23,9 +23,6 @@ import java.awt.event.ActionEvent;
 
 public class TelaPrincipal extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblData;
@@ -38,23 +35,27 @@ public class TelaPrincipal extends JFrame {
 	private JDesktopPane telaPrincipalDesktopPane;
 	public TelaPrincipal(String nomeUsuario, String perfilUsuario) {
 
-		setBounds(new Rectangle(0, 0, 800, 600));
-
-		setSize(new Dimension(800, 600));
-		setTitle("X - Sistema para controle de OS");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 700);
-
+		montaFrameDaJanela();
 		montaBarraDeMenu();
-
-		
-
 		montaSubItensMenuCadastro();
 		montaSubItensMenuRelatorio();
 		montaSubItensMenuAjuda();
 		montaSubItensMenuOpcoes();
-		
+		montaJanela();
+		montaFrameDaJanelaInterna();
+		montaLabels(nomeUsuario, perfilUsuario);
+	}
 
+	private void montaFrameDaJanelaInterna() {
+		telaPrincipalDesktopPane = new JDesktopPane();
+		telaPrincipalDesktopPane.setMaximumSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setMinimumSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setSize(new Dimension(640, 480));
+		telaPrincipalDesktopPane.setBounds(12, 12, 640, 480);
+		contentPane.add(telaPrincipalDesktopPane);
+	}
+
+	private void montaJanela() {
 		contentPane = new JPanel();
 		contentPane.setPreferredSize(new Dimension(800, 600));
 		contentPane.setSize(new Dimension(800, 600));
@@ -62,18 +63,9 @@ public class TelaPrincipal extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+	}
 
-		telaPrincipalDesktopPane = new JDesktopPane();
-		telaPrincipalDesktopPane.setMaximumSize(new Dimension(640, 480));
-		telaPrincipalDesktopPane.setMinimumSize(new Dimension(640, 480));
-		telaPrincipalDesktopPane.setSize(new Dimension(640, 480));
-		telaPrincipalDesktopPane.setBounds(12, 12, 640, 480);
-		contentPane.add(telaPrincipalDesktopPane);
-
-
-
-
-
+	private void montaLabels(String nomeUsuario, String perfilUsuario) {
 		JLabel lblUsuario = new JLabel(nomeUsuario);
 		lblUsuario.setBounds(670, 51, 130, 15);
 		contentPane.add(lblUsuario);
@@ -91,6 +83,15 @@ public class TelaPrincipal extends JFrame {
 			mnRelatorio.setEnabled(false);
 			mntmUsuarios.setEnabled(false);
 		}
+	}
+
+	private void montaFrameDaJanela() {
+		setBounds(new Rectangle(0, 0, 800, 600));
+
+		setSize(new Dimension(800, 600));
+		setTitle("X - Sistema para controle de OS");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 900, 700);
 	}
 
 	private void montaSubItensMenuOpcoes() {

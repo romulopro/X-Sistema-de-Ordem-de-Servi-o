@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,7 +33,7 @@ public class TelaUsuario extends JInternalFrame {
 	private JTextField textFUsuLogin;
 	private JTextField textFUsuSenha;
 	private JComboBox<String> cBoxUsuPerfil;
-	private static Connection conexao = null;
+	private static Optional<Connection> conexao;
 	private PreparedStatement pst = null;
 	private ResultSet rs;
 
@@ -48,7 +49,7 @@ public class TelaUsuario extends JInternalFrame {
 	private void consultar(){
 		String sql = "SELECT * FROM tbusuarios WHERE iduser=?";
 		try {
-			pst = conexao.prepareStatement(sql);
+			pst = conexao.get().prepareStatement(sql);
 			pst.setString(1, textFUsuId.getText());
 			rs = pst.executeQuery();
 			if (rs.next()) {
@@ -77,7 +78,7 @@ public class TelaUsuario extends JInternalFrame {
 			return;
 		}
 		try {
-			pst = conexao.prepareStatement(query);
+			pst = conexao.get().prepareStatement(query);
 			pst.setString(1, textFUsuId.getText());
 			pst.setString(2, textFUsuNome.getText());
 			pst.setString(3, textFUsuFone.getText());
@@ -103,7 +104,7 @@ public class TelaUsuario extends JInternalFrame {
 			return;
 		}
 		try {
-			pst=  conexao.prepareStatement(query);
+			pst = conexao.get().prepareStatement(query);
 			pst.setString(1, textFUsuNome.getText());
 			pst.setString(2, textFUsuFone.getText());
 			pst.setString(3, textFUsuLogin.getText());
@@ -136,7 +137,7 @@ public class TelaUsuario extends JInternalFrame {
 		}
 		
 		try {
-			pst = conexao.prepareStatement(query);
+			pst = conexao.get().prepareStatement(query);
 			pst.setString(1, textFUsuId.getText());
 			removido = pst.executeUpdate();
 			if (removido > 0){

@@ -1,14 +1,12 @@
 package br.com.infox.telas;
 
-import java.awt.EventQueue;
-
 import javax.swing.JInternalFrame;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,7 +36,7 @@ public class TelaCliente extends JInternalFrame {
 	private JTextField txtFCliPesquisar;
 	private JTable tblClientes;
 	private JButton BtnCliAdicionar;
-	private Connection conexao = null;
+	private Optional<Connection> conexao;
 	private PreparedStatement pst;
 	private ResultSet rs;
 	private JTextField txtFCIdCliente;
@@ -199,7 +197,7 @@ public class TelaCliente extends JInternalFrame {
 			return;
 		}
 		try {
-			pst = conexao.prepareStatement(query);
+			pst = conexao.get().prepareStatement(query);
 			pst.setString(1, txtFCliNome.getText());
 			pst.setString(2, txtFCliEndereco.getText());
 			pst.setString(3, txtFCliTelefone.getText());
@@ -225,7 +223,7 @@ public class TelaCliente extends JInternalFrame {
 		txtFCliEndereco.setText(null);
 		txtFCliTelefone.setText(null);
 		txtFCliEmail.setText(null);
-		((DefaultTableModel) tblClientes.getModel()).setRowCount(0);
+		//((DefaultTableModel) tblClientes.getModel()).setRowCount(0);
 	}
 
 	private boolean ha1ouMaisCamposObrigatoriosVazios() {
@@ -240,7 +238,7 @@ public class TelaCliente extends JInternalFrame {
 				+ "emailcli as Email "
 				+ "FROM tbclientes WHERE nomecli LIKE ?";
 		try {
-			pst = conexao.prepareStatement(sqlQuery);
+			pst = conexao.get().prepareStatement(sqlQuery);
 			pst.setString(1, txtFCliPesquisar.getText() + "%");
 			rs = pst.executeQuery();
 			tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
@@ -266,7 +264,7 @@ public class TelaCliente extends JInternalFrame {
 			return;
 		}
 		try {
-			pst=  conexao.prepareStatement(query);
+			pst=  conexao.get().prepareStatement(query);
 			pst.setString(1, txtFCliNome.getText());
 			pst.setString(2, txtFCliEndereco.getText());
 			pst.setString(3, txtFCliTelefone.getText());
@@ -294,7 +292,7 @@ public class TelaCliente extends JInternalFrame {
 		}
 		
 		try {
-			pst = conexao.prepareStatement(query);
+			pst = conexao.get().prepareStatement(query);
 			pst.setString(1, txtFCIdCliente.getText());
 			removido = pst.executeUpdate();
 			if (removido > 0){

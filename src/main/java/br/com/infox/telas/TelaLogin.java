@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Optional;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -33,7 +34,7 @@ public class TelaLogin extends JFrame {
 	private JTextField textFieldUsuario;
 	private JPasswordField passwordFieldSenha;
 	private static JLabel lblConectado;
-	static Connection conexao = null;
+	static Optional<Connection> conexao;
 	PreparedStatement pst = null;
 	ResultSet rs = null;
 
@@ -45,7 +46,7 @@ public class TelaLogin extends JFrame {
 		String sql = "SELECT * from tbusuarios where login=? and senha=?";
 		try {
 			String usuario = textFieldUsuario.getText();
-			pst = conexao.prepareStatement(sql);
+			pst = conexao.get().prepareStatement(sql);
 			pst.setString(1, usuario);
 			String captura = new String(passwordFieldSenha.getPassword());
 			pst.setString(2, captura);
@@ -56,7 +57,7 @@ public class TelaLogin extends JFrame {
 				TelaPrincipal principal = new TelaPrincipal(nomeUsuario, perfil);
 				principal.setVisible(true);
 				this.dispose();
-				conexao.close();
+				conexao.get().close();
 			}else {
 				JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido");
 			}
@@ -66,10 +67,6 @@ public class TelaLogin extends JFrame {
 		}
 	}
 
-
-	/**
-	 * Create the frame.
-	 */
 	public TelaLogin() {
 		
 		doLoginWindowFrame();
@@ -130,7 +127,7 @@ public class TelaLogin extends JFrame {
 					TelaLogin frame = new TelaLogin();
 					frame.setVisible(true);
 					conexao = ModuloConexao.conector();
-					if(conexao != null) {
+					if(conexao.isPresent()) {
 						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dbok.png")));
 					}else {
 						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dberror.png")));
