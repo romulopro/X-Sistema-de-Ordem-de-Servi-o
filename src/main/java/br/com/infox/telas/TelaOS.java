@@ -112,7 +112,7 @@ public class TelaOS extends JInternalFrame {
 		txtFOSNumero.setColumns(10);
 		
 		txtFOSData = new JTextField();
-		txtFOSData.setBounds(68, 39, 114, 19);
+		txtFOSData.setBounds(68, 39, 183, 19);
 		subPainelOS.add(txtFOSData);
 		txtFOSData.setColumns(10);
 		
@@ -144,7 +144,7 @@ public class TelaOS extends JInternalFrame {
 		
 		comboBoxSituacao = new JComboBox<String>();
 		comboBoxSituacao.setFont(new Font("Dialog", Font.PLAIN, 11));
-		comboBoxSituacao.setModel(new DefaultComboBoxModel(new String[] {"Na bancada", "Entrega OK", "Orçamento Reprovado", "Aguardando Aprovação", "Aguardando Peças", "Abandonado Pelo Cliente", "Retornou"}));
+		comboBoxSituacao.setModel(new DefaultComboBoxModel<String>(new String[] {"Na bancada", "Entrega OK", "Orçamento Reprovado", "Aguardando Aprovação", "Aguardando Peças", "Abandonado Pelo Cliente", "Retornou"}));
 		comboBoxSituacao.setBounds(80, 117, 183, 24);
 		getContentPane().add(comboBoxSituacao);
 		
@@ -378,7 +378,7 @@ public class TelaOS extends JInternalFrame {
 			}
 			
 		} 
-		catch (java.sql.SQLSyntaxErrorException e) {
+		catch (SQLSyntaxErrorException e) {
 			JOptionPane.showMessageDialog(null, "Entrada Inválida, utilize somente números");
 		}
 		
