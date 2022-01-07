@@ -2,11 +2,12 @@ package br.com.infox.dal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class ModuloConexao {
 	public static Optional<Connection> conector() {
-		//Connection conexao = null;
+		//Optional<Connection> conexao;
 		
 		String driver = "com.mysql.cj.jdbc.Driver";
 		String url="jdbc:mysql://localhost:3306/dbinfox"; //dbinfox é nome do bd
@@ -17,10 +18,13 @@ public class ModuloConexao {
 		
 		try {
 			Class.forName(driver);
-			return Optional.of(DriverManager.getConnection(url, user, password));
+			//conexao = 
+			return (Optional<Connection>) Optional.of(DriverManager.getConnection(url, user, password));
 			
-		}catch(Exception e) {
-			System.out.println(e);
+		}catch(SQLException e) {
+			return Optional.empty();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
 			return Optional.empty();
 		}
 		

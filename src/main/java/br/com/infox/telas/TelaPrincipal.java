@@ -1,25 +1,32 @@
 package br.com.infox.telas;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
 import java.awt.Dimension;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import javax.swing.JDesktopPane;
 import java.awt.Rectangle;
-import javax.swing.JLabel;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.util.Date;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.util.Optional;
+
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+
+import br.com.infox.dal.ModuloConexao;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class TelaPrincipal extends JFrame {
 
@@ -33,6 +40,7 @@ public class TelaPrincipal extends JFrame {
 	private JMenu mnAjuda;
 	private JMenu mnOpcoes;
 	private JDesktopPane telaPrincipalDesktopPane;
+	private Optional<Connection> conexao;
 	public TelaPrincipal(String nomeUsuario, String perfilUsuario) {
 
 		montaFrameDaJanela();
@@ -163,9 +171,53 @@ public class TelaPrincipal extends JFrame {
 	}
 	
 	private void montaSubItensMenuRelatorio() {
+		
+		JMenuItem mntmClientes = new JMenuItem("Clientes");
+		mntmClientes.addActionListener(new ActionListener() {
+			
+
+			public void actionPerformed(ActionEvent arg0) {
+				int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão deste relatório?", "Atenção", JOptionPane.YES_NO_OPTION);
+				if(isOpcaoNaoEscolhida(confirma)) {
+					return;
+				}
+				conexao = ModuloConexao.conector();
+				try {
+					JasperPrint print = JasperFillManager.fillReport("/home/note/JaspersoftWorkspace/MyReports/cliente.jasper",null, conexao.get());
+					JasperViewer.viewReport(print, false);
+				} catch (JRException e) {
+					JOptionPane.showMessageDialog(null, e);
+				}
+			}
+
+
+		});
+		mntmClientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.ALT_DOWN_MASK));
+		mnRelatorio.add(mntmClientes);
+		
 		JMenuItem mntmServicos = new JMenuItem("Serviços");
+		mntmServicos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão deste relatório?", "Atenção", JOptionPane.YES_NO_OPTION);
+				if(isOpcaoNaoEscolhida(confirma)) {
+					return;
+				}
+				conexao = ModuloConexao.conector();
+				try {
+					JasperPrint print = JasperFillManager.fillReport("/home/note/JaspersoftWorkspace/MyReports/servicos.jasper",null, conexao.get());
+					JasperViewer.viewReport(print, false);
+				} catch (JRException e) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, e);
+				}
+			}
+		});
 		mntmServicos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.ALT_DOWN_MASK));
 		mnRelatorio.add(mntmServicos);
+	}
+	
+	private boolean isOpcaoNaoEscolhida(int confirma) {
+		return confirma == JOptionPane.NO_OPTION;
 	}
 
 	private void montaBarraDeMenu() {

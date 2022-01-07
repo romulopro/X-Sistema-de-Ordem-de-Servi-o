@@ -1,11 +1,8 @@
 package br.com.infox.telas;
 
-import java.awt.EventQueue;
-
 import javax.swing.BorderFactory;
 import javax.swing.JInternalFrame;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,6 +37,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.table.DefaultTableModel;
 
 public class TelaOS extends JInternalFrame {
 	private JTextField txtFOSNumero;
@@ -62,60 +60,55 @@ public class TelaOS extends JInternalFrame {
 	private JRadioButton rdbtnOrdemDeServico;
 	private JButton btnOSAdicionar;
 	private JButton btnOSPesquisar;
-	/**
-	 * Launch the application.
-	 */
+	private JButton btnOSEditar;
+	private JButton btnOSDeletar;
+	private JButton btnOSImprimir;
 
-
-	/**
-	 * Create the frame.
-	 */
 	public TelaOS() {
 		addInternalFrameListener(new InternalFrameAdapter() {
 			@Override
 			public void internalFrameOpened(InternalFrameEvent e) {
-				//Ao abriri o form, marcar o radioButton Orcamento
 				rdbtnOrcamento.setSelected(true);
 				tipo = rdbtnOrcamento.getText();
 			}
 		});
 		conexao = ModuloConexao.conector();
-		
+
 		setTitle("OS");
 		setMaximizable(true);
 		setIconifiable(true);
 		setClosable(true);
 		setMaximumSize(new Dimension(640, 480));
-		
+
 		setSize(new Dimension(640, 480));
 		setPreferredSize(new Dimension(640, 480));
 		setMinimumSize(new Dimension(640, 480));
 		getContentPane().setLayout(null);
-		
+
 		JPanel subPainelOS = new JPanel();
 		subPainelOS.setBounds(12, 12, 263, 94);
 		subPainelOS.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		getContentPane().add(subPainelOS);
 		subPainelOS.setLayout(null);
-		
+
 		JLabel lblOSNum = new JLabel("Nº OS");
 		lblOSNum.setBounds(12, 12, 70, 15);
 		subPainelOS.add(lblOSNum);
-		
+
 		JLabel lblOSData = new JLabel("Data");
 		lblOSData.setBounds(68, 12, 70, 15);
 		subPainelOS.add(lblOSData);
-		
+
 		txtFOSNumero = new JTextField();
 		txtFOSNumero.setBounds(12, 39, 47, 19);
 		subPainelOS.add(txtFOSNumero);
 		txtFOSNumero.setColumns(10);
-		
+
 		txtFOSData = new JTextField();
 		txtFOSData.setBounds(68, 39, 183, 19);
 		subPainelOS.add(txtFOSData);
 		txtFOSData.setColumns(10);
-		
+
 		rdbtnOrcamento = new JRadioButton("Orçamento");
 		rdbtnOrcamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -126,7 +119,7 @@ public class TelaOS extends JInternalFrame {
 		buttonGroupOS.add(rdbtnOrcamento);
 		rdbtnOrcamento.setBounds(12, 63, 95, 23);
 		subPainelOS.add(rdbtnOrcamento);
-		
+
 		rdbtnOrdemDeServico = new JRadioButton("Ordem de Serviço");
 		rdbtnOrdemDeServico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -137,23 +130,24 @@ public class TelaOS extends JInternalFrame {
 		buttonGroupOS.add(rdbtnOrdemDeServico);
 		rdbtnOrdemDeServico.setBounds(117, 63, 140, 23);
 		subPainelOS.add(rdbtnOrdemDeServico);
-		
+
 		JLabel lblSituacao = new JLabel("Situação");
 		lblSituacao.setBounds(12, 122, 70, 15);
 		getContentPane().add(lblSituacao);
-		
+
 		comboBoxSituacao = new JComboBox<String>();
 		comboBoxSituacao.setFont(new Font("Dialog", Font.PLAIN, 11));
-		comboBoxSituacao.setModel(new DefaultComboBoxModel<String>(new String[] {"Na bancada", "Entrega OK", "Orçamento Reprovado", "Aguardando Aprovação", "Aguardando Peças", "Abandonado Pelo Cliente", "Retornou"}));
+		comboBoxSituacao.setModel(
+				new DefaultComboBoxModel<String>(new String[] {" ", "Na bancada", "Entrega OK", "Orçamento Reprovado", "Aguardando Aprovação", "Aguardando Peças", "Abandonado Pelo Cliente", "Retornou"}));
 		comboBoxSituacao.setBounds(80, 117, 183, 24);
 		getContentPane().add(comboBoxSituacao);
-		
+
 		JPanel subPainelOSCliente = new JPanel();
 		subPainelOSCliente.setBounds(280, 12, 338, 174);
-		subPainelOSCliente.setBorder(BorderFactory.createTitledBorder( "Cliente"));
+		subPainelOSCliente.setBorder(BorderFactory.createTitledBorder("Cliente"));
 		getContentPane().add(subPainelOSCliente);
 		subPainelOSCliente.setLayout(null);
-		
+
 		txtFOSPesquisarCliente = new JTextField();
 		txtFOSPesquisarCliente.addKeyListener(new KeyAdapter() {
 			@Override
@@ -164,28 +158,25 @@ public class TelaOS extends JInternalFrame {
 		txtFOSPesquisarCliente.setBounds(12, 24, 114, 19);
 		subPainelOSCliente.add(txtFOSPesquisarCliente);
 		txtFOSPesquisarCliente.setColumns(10);
-		
+
 		JLabel lblIconSearch = new JLabel("");
 		lblIconSearch.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/search_textField_32.png")));
 		lblIconSearch.setBounds(131, 15, 32, 32);
 		subPainelOSCliente.add(lblIconSearch);
-		
+
 		JLabel lblIDCliente = new JLabel("*Id");
 		lblIDCliente.setBounds(178, 26, 70, 15);
 		subPainelOSCliente.add(lblIDCliente);
-		
+
 		txtFOSSubPainelClienteId = new JTextField();
 		txtFOSSubPainelClienteId.setEditable(false);
 		txtFOSSubPainelClienteId.setBounds(209, 24, 47, 19);
 		subPainelOSCliente.add(txtFOSSubPainelClienteId);
 		txtFOSSubPainelClienteId.setColumns(10);
-		
-		Object row[][]= {{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null}};
-		String columnName[] = {"ID", "Nome", "Telefone"};
-		
+
+		Object row[][] = { { null, null, null }, { null, null, null }, { null, null, null }, { null, null, null } };
+		String columnName[] = { "ID", "Nome", "Telefone" };
+
 		tableOSCliente = new JTable(row, columnName) {
 			/**
 			 * 
@@ -209,53 +200,53 @@ public class TelaOS extends JInternalFrame {
 		jScrollPane.setBounds(12, 55, 314, 101);
 		jScrollPane.setViewportView(tableOSCliente);
 		subPainelOSCliente.add(jScrollPane);
-		
+
 		txtFOSEquipamento = new JTextField();
 		txtFOSEquipamento.setBounds(135, 198, 483, 19);
 		getContentPane().add(txtFOSEquipamento);
 		txtFOSEquipamento.setColumns(10);
-		
+
 		txtFOSDefeito = new JTextField();
 		txtFOSDefeito.setBounds(135, 218, 483, 19);
 		getContentPane().add(txtFOSDefeito);
 		txtFOSDefeito.setColumns(10);
-		
+
 		txtFOSServico = new JTextField();
 		txtFOSServico.setBounds(135, 239, 483, 19);
 		getContentPane().add(txtFOSServico);
 		txtFOSServico.setColumns(10);
-		
+
 		txtFOSTecnico = new JTextField();
 		txtFOSTecnico.setBounds(135, 259, 181, 19);
 		getContentPane().add(txtFOSTecnico);
 		txtFOSTecnico.setColumns(10);
-		
+
 		JLabel lblEquipamento = new JLabel("Equipamento*");
 		lblEquipamento.setBounds(12, 200, 105, 15);
 		getContentPane().add(lblEquipamento);
-		
+
 		JLabel lblDefeito = new JLabel("Defeito*");
 		lblDefeito.setBounds(12, 220, 70, 15);
 		getContentPane().add(lblDefeito);
-		
+
 		JLabel lblServico = new JLabel("Serviço");
 		lblServico.setBounds(12, 241, 70, 15);
 		getContentPane().add(lblServico);
-		
+
 		JLabel lblTcnico = new JLabel("Técnico");
 		lblTcnico.setBounds(12, 260, 70, 15);
 		getContentPane().add(lblTcnico);
-		
+
 		JLabel lblValorTotal = new JLabel("Valor Total");
 		lblValorTotal.setBounds(334, 260, 83, 15);
 		getContentPane().add(lblValorTotal);
-		
+
 		txtFOSValor = new JTextField();
 		txtFOSValor.setText("0");
 		txtFOSValor.setBounds(435, 259, 183, 19);
 		getContentPane().add(txtFOSValor);
 		txtFOSValor.setColumns(10);
-		
+
 		btnOSAdicionar = new JButton("");
 		btnOSAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -265,7 +256,7 @@ public class TelaOS extends JInternalFrame {
 		btnOSAdicionar.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/Adicionar.png")));
 		btnOSAdicionar.setBounds(34, 340, 90, 90);
 		getContentPane().add(btnOSAdicionar);
-		
+
 		btnOSPesquisar = new JButton("");
 		btnOSPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -275,50 +266,65 @@ public class TelaOS extends JInternalFrame {
 		btnOSPesquisar.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/Procurar.png")));
 		btnOSPesquisar.setBounds(156, 340, 90, 90);
 		getContentPane().add(btnOSPesquisar);
+
+		btnOSEditar = new JButton("");
 		
-		JButton btnOSEditar = new JButton("");
+		
+		btnOSEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				atualizarDadosOS();
+			}
+
+		});
 		btnOSEditar.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/Editar.png")));
 		btnOSEditar.setBounds(278, 340, 90, 90);
 		getContentPane().add(btnOSEditar);
+
+		btnOSDeletar = new JButton("");
 		
-		JButton btnOSDeletar = new JButton("");
+		btnOSDeletar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				deletarOS();
+			}
+		});
 		btnOSDeletar.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/Remover.png")));
 		btnOSDeletar.setBounds(400, 340, 90, 90);
 		getContentPane().add(btnOSDeletar);
+
+		btnOSImprimir = new JButton("");
 		
-		JButton btnOSImprimir = new JButton("");
-		btnOSImprimir.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/314492_printer_text_icon.png")));
+		btnOSImprimir
+				.setIcon(new ImageIcon(TelaOS.class.getResource("/br/com/infox/icones/314492_printer_text_icon.png")));
 		btnOSImprimir.setBounds(522, 340, 90, 90);
 		getContentPane().add(btnOSImprimir);
-		
-		
+		desablitarBotoesImprimirDeletarEditar();
 
 	}
+
 	private void pesquisarCliente() {
-		String sqlQuery = "SELECT idcli as ID, "
-				+ "nomecli as Nome, "
-				+ "fonecli as Telefone "
+		String sqlQuery = "SELECT idcli as ID, " + "nomecli as Nome, " + "fonecli as Telefone "
 				+ "FROM tbclientes WHERE nomecli LIKE ?";
 		try {
 			pst = conexao.get().prepareStatement(sqlQuery);
 			pst.setString(1, txtFOSPesquisarCliente.getText() + "%");
 			rs = pst.executeQuery();
 			tableOSCliente.setModel(DbUtils.resultSetToTableModel(rs));
-		}catch(Exception e){
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e);
 		}
 	}
-	
+
 	private void setarCampos() {
 		int setar = tableOSCliente.getSelectedRow();
 		txtFOSSubPainelClienteId.setText(tableOSCliente.getModel().getValueAt(setar, 0).toString());
-		
+
 	}
-	
+
 	private void emitirOS() {
+		int adicionado;
 		String sqlQuery = "INSERT INTO tbos (tipo, situacao, equipamento, defeito, servico, tecnico, valor, idcli)"
 				+ "values(?,?,?,?,?,?,?,?)";
-		if(haAlgumCampoObrigatorioVazio()) {
+		if (isAlgumCampoObrigatorioVazio()) {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios");
 			return;
 		}
@@ -332,40 +338,33 @@ public class TelaOS extends JInternalFrame {
 			pst.setString(6, txtFOSTecnico.getText());
 			pst.setString(7, txtFOSValor.getText().replace(",", "."));
 			pst.setString(8, txtFOSSubPainelClienteId.getText());
-			int adicionado = pst.executeUpdate();
-			btnOSAdicionar.setEnabled(false);
-			txtFOSPesquisarCliente.setEnabled(false);
-			tableOSCliente.setVisible(false);
-			if(adicionado>0) {
+			adicionado = pst.executeUpdate();
+			if (adicionado > 0) {
 				JOptionPane.showMessageDialog(null, "OS adicionada com sucesso");
 				limparTodosOsCampos();
+				desablitarBotoesImprimirDeletarEditar();
 			}
 			// validacao de campos obrigatórios
-				
-		} catch(Exception e) {
+
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e);
 		}
 	}
-	
+
 	private void pesquisarOS() {
 		String numeroOS = JOptionPane.showInputDialog("Número da OS");
-		String sqlQuery = "SELECT * FROM tbos where os=" + numeroOS;
+		String sqlQuery = "SELECT os, date_format(data_os, '%d/%m/%Y - %H:%i'), tipo,"
+				+ "situacao, equipamento, defeito, servico, tecnico, valor, idcli"
+				+ " FROM tbos WHERE os=" + numeroOS;
 		try {
 			pst = conexao.get().prepareStatement(sqlQuery);
+			//pst.setString(1, numeroOS);
 			rs = pst.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				txtFOSNumero.setText(rs.getString(1));
 				txtFOSData.setText(rs.getString(2));
 				String rbtTipo = rs.getString(3);
-				if(rbtTipo == "OS") {
-					rdbtnOrcamento.setSelected(true);
-					rdbtnOrdemDeServico.setSelected(false);
-					tipo = "OS";
-				}else {
-					rdbtnOrcamento.setSelected(false);
-					rdbtnOrdemDeServico.setSelected(true);
-					tipo = "Orçamento";
-				}
+				
 				comboBoxSituacao.setSelectedItem(rs.getString(4));
 				txtFOSEquipamento.setText(rs.getString(5));
 				txtFOSDefeito.setText(rs.getString(6));
@@ -373,33 +372,126 @@ public class TelaOS extends JInternalFrame {
 				txtFOSTecnico.setText(rs.getString(8));
 				txtFOSValor.setText(rs.getString(9));
 				txtFOSSubPainelClienteId.setText(rs.getString(10));
-			}else {
+				if (rbtTipo == "OS") {
+					rdbtnOrcamento.setSelected(true);
+					rdbtnOrdemDeServico.setSelected(false);
+					tipo = "OS";
+				} else {
+					rdbtnOrcamento.setSelected(false);
+					rdbtnOrdemDeServico.setSelected(true);
+					tipo = "Orçamento";
+				}
+				btnOSAdicionar.setEnabled(false);
+				txtFOSPesquisarCliente.setEnabled(false);
+				tableOSCliente.setVisible(false);
+				
+				btnOSDeletar.setEnabled(true);
+				btnOSEditar.setEnabled(true);
+				btnOSImprimir.setEnabled(true);
+				
+			} else {
 				JOptionPane.showMessageDialog(null, "OS não cadastrada");
 			}
-			
-		} 
-		catch (SQLSyntaxErrorException e) {
-			JOptionPane.showMessageDialog(null, "Entrada Inválida, utilize somente números");
+
+		} catch (SQLSyntaxErrorException e) {
+			JOptionPane.showMessageDialog(null, "Entrada inválida, utilize somente números", null, JOptionPane.WARNING_MESSAGE);
 		}
-		
+
 		catch (SQLException e2) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, e2);
 		}
-		
-		
+
 	}
-	private boolean haAlgumCampoObrigatorioVazio() {
+
+	private void atualizarDadosOS() {
+		String sqlQuery = "UPDATE tbos SET tipo=?, situacao=?, equipamento=?, defeito=?,"
+				+ "servico=?, tecnico=?, valor=? WHERE os=?";
+		if (isAlgumCampoObrigatorioVazio()) {
+			JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios");
+			return;
+		}
+		try {
+			pst = conexao.get().prepareStatement(sqlQuery);
+			pst.setString(1, tipo);
+			pst.setString(2, comboBoxSituacao.getSelectedItem().toString());
+			pst.setString(3, txtFOSEquipamento.getText());
+			pst.setString(4, txtFOSDefeito.getText());
+			pst.setString(5, txtFOSServico.getText());
+			pst.setString(6, txtFOSTecnico.getText());
+			pst.setString(7, txtFOSValor.getText().replace(",", "."));
+			pst.setString(8, txtFOSNumero.getText());
+			int adicionado = pst.executeUpdate();
+			if (adicionado > 0) {
+				JOptionPane.showMessageDialog(null, "OS alterada com sucesso");
+				limparTodosOsCampos();
+				desablitarBotoesImprimirDeletarEditar();
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+
+	}
+
+	private void deletarOS() {
+		String sqlQuery;
+		int apagado = 0;
+		int confirma;
+		if(txtFOSNumero.getText() == null) {
+			JOptionPane.showMessageDialog(null, "Nenhuma OS Selecionada");
+			return;
+		}
+		confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar a OS?", "Atenção",
+				JOptionPane.YES_NO_OPTION);
+		if (isOpcaoNaoSelecionada(confirma)) {
+			return;
+		}
+		sqlQuery = "DELETE FROM tbos WHERE os=?";
+		try {
+			pst = conexao.get().prepareStatement(sqlQuery);
+			pst.setString(1, txtFOSNumero.getText());
+			apagado = pst.executeUpdate();
+			if (apagado > 0) {
+				JOptionPane.showMessageDialog(null, "OS apagada com sucesso");
+				limparTodosOsCampos();
+				desablitarBotoesImprimirDeletarEditar();
+			} else {
+				JOptionPane.showMessageDialog(null, "Erro ao apagar a OS");
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
+
+	}
+
+	private boolean isOpcaoNaoSelecionada(int confirma) {
+		return confirma == JOptionPane.NO_OPTION;
+	}
+
+	private boolean isAlgumCampoObrigatorioVazio() {
 		return txtFOSSubPainelClienteId.getText().isEmpty() 
 				|| txtFOSEquipamento.getText().isEmpty()
-				|| txtFOSDefeito.getText().isEmpty();
+				|| txtFOSDefeito.getText().isEmpty()
+				|| comboBoxSituacao.getSelectedItem().equals(" ");
 	}
+
 	private void limparTodosOsCampos() {
+		txtFOSNumero.setText(null);
+		txtFOSData.setText(null);
+		txtFOSPesquisarCliente.setText(null);
 		txtFOSEquipamento.setText(null);
 		txtFOSDefeito.setText(null);
 		txtFOSServico.setText(null);
 		txtFOSTecnico.setText(null);
 		txtFOSValor.setText(null);
 		txtFOSSubPainelClienteId.setText(null);
+		txtFOSSubPainelClienteId.setText(null);
+		comboBoxSituacao.setSelectedItem(" ");
+//		tableOSCliente.set;
+		desablitarBotoesImprimirDeletarEditar();
+	}
+	private void desablitarBotoesImprimirDeletarEditar() {
+		btnOSEditar.setEnabled(false);
+		btnOSDeletar.setEnabled(false);
+		btnOSImprimir.setEnabled(false);
 	}
 }

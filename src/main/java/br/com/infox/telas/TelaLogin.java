@@ -1,26 +1,28 @@
 package br.com.infox.telas;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import br.com.infox.dal.ModuloConexao;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
+
 
 public class TelaLogin extends JFrame {
 
@@ -34,21 +36,21 @@ public class TelaLogin extends JFrame {
 	private JTextField textFieldUsuario;
 	private JPasswordField passwordFieldSenha;
 	private static JLabel lblConectado;
-	static Optional<Connection> conexao;
-	PreparedStatement pst = null;
-	ResultSet rs = null;
+	private static Optional<Connection> conexao;
+	private PreparedStatement pst = null;
+	private ResultSet rs = null;
 
 	/**
 	 * Launch the application.
 	 */
 	
 	public void logar() {
-		String sql = "SELECT * from tbusuarios where login=? and senha=?";
+		String sql = "SELECT * FROM tbusuarios WHERE login=? AND senha=?";
 		try {
 			String usuario = textFieldUsuario.getText();
+			String captura = new String(passwordFieldSenha.getPassword());
 			pst = conexao.get().prepareStatement(sql);
 			pst.setString(1, usuario);
-			String captura = new String(passwordFieldSenha.getPassword());
 			pst.setString(2, captura);
 			rs = pst.executeQuery();
 			if(rs.next()) {
@@ -59,23 +61,22 @@ public class TelaLogin extends JFrame {
 				this.dispose();
 				conexao.get().close();
 			}else {
-				JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido");
+				JOptionPane.showMessageDialog(null, "Usuário e/ou senha inválido(s)");
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
+		}catch(SQLException e) {
 			JOptionPane.showMessageDialog(null, e);
 		}
 	}
 
 	public TelaLogin() {
 		
-		doLoginWindowFrame();
-		doJLabels();
-		doUserAndPassTxtFields();
-		doLogonButton();
+		fazerFrame();
+		fazerLabels();
+		fazerTextFields();
+		fazerBotao();
 		
 	}
-	private void doLoginWindowFrame() {
+	private void fazerFrame() {
 		setPreferredSize(new Dimension(380, 190));
 		setTitle("Tela de Login");
 		setResizable(false);
@@ -86,7 +87,7 @@ public class TelaLogin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 	}
-	private void doLogonButton() {
+	private void fazerBotao() {
 		JButton btnLogar = new JButton("Logar");
 		btnLogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -96,7 +97,7 @@ public class TelaLogin extends JFrame {
 		btnLogar.setBounds(160, 145, 117, 25);
 		contentPane.add(btnLogar);
 	}
-	private void doUserAndPassTxtFields() {
+	private void fazerTextFields() {
 		textFieldUsuario = new JTextField();
 		textFieldUsuario.setBounds(138, 56, 139, 19);
 		contentPane.add(textFieldUsuario);
@@ -106,7 +107,7 @@ public class TelaLogin extends JFrame {
 		passwordFieldSenha.setBounds(138, 96, 139, 19);
 		contentPane.add(passwordFieldSenha);
 	}
-	private void doJLabels() {
+	private void fazerLabels() {
 		JLabel lblUsuario = new JLabel("Usuário");
 		lblUsuario.setBounds(50, 60, 70, 15);
 		contentPane.add(lblUsuario);
@@ -123,18 +124,14 @@ public class TelaLogin extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					TelaLogin frame = new TelaLogin();
-					frame.setVisible(true);
-					conexao = ModuloConexao.conector();
-					if(conexao.isPresent()) {
-						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dbok.png")));
-					}else {
-						lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dberror.png")));
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
+				TelaLogin frame = new TelaLogin();
+				frame.setVisible(true);
+				conexao = ModuloConexao.conector();
+				if (conexao.isPresent()) {
+					lblConectado.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dbok.png")));
+				} else {
+					lblConectado
+							.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/com/infox/icones/dberror.png")));
 				}
 			}
 		});
